@@ -9,7 +9,7 @@
 PACKAGE=acmart
 
 SAMPLES = \
-	ccs-template.tex 
+	iotrecording.tex 
 
 PDF = ${SAMPLES:%.tex=%.pdf}
 
@@ -63,7 +63,8 @@ clean:
 	*.cfg *.glo *.idx *.toc \
 	*.ilg *.ind *.out *.lof \
 	*.lot *.bbl *.blg *.gls *.cut *.hd \
-	*.dvi *.ps *.thm *.tgz *.zip *.rpi
+	*.dvi *.ps *.thm *.tgz *.zip *.rpi \
+	$(PDF)
 
 distclean: clean
 	$(RM) $(PDF) *-converted-to.pdf
