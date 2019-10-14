@@ -1,4 +1,4 @@
-projectp_proposal/ccs-template.pdf
+project_proposal/ccs-template.pdf
 *.DS_Store
 *acmart.cls 
 *.aux
@@ -13,3 +13,5 @@ projectp_proposal/ccs-template.pdf
 *.cb
 *.cb2
 .*.lb
+*.bbl
+*.blg
