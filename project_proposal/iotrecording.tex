@@ -23,7 +23,7 @@
 
 
 \begin{abstract}
-Our perliminary experiments with Amazon Echo have found that the recorded part of the same command is not consistent across different trials. This stimulates us to question and examine the behaviour of Amazon Echo and dig into what is exactly being collected by it. We plan to use netwrok traffic mearsurement for our work, with which previous researchers have been able to infer users' activities \cite{apthorpe2017spying} and establish network signatures for Amazon Echo \cite{ford2019alexa}. If this approach does work, we will be able to answer a whole set of research questions with it.
+We examine the problem of whether Amazon is being honest with users in presenting the audio data it collected. Amazon Echo is Amazon's smart speaker that has an always-on microphone. It would start recording after hearing certain wake word (Alexa, Echo, etc.) and then send the recorded audio to its server for further processing. Amazon allows user to browse and delete all audio data sent to them. We suspect that the audio data made available to users might only be a subset of the audio is being collected and transmitted to the server, and our initial experiments suggest that this might be the case.
 \end{abstract}
 
 
