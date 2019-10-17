@@ -2,9 +2,9 @@
 
 We want to quantify how far beyond the bounds (start and end) of a particular command the smart speaker records and transmits to the cloud. We want to test how the ambient noise levels (e.g. music or conversation) surrounding the command affect the length of this extra recording.
 
-We also want to know how the smart speaker decides when to stop recording and transmitting to the cloud. Does it receive a stop command from the cloud, or does it stop on its own, either through detecting the end of the command through some heuristic or a simple time-out? In particular, if the ending condition is missed for whatever reason, how long will the smart speaker record and upload to the cloud before stopping?
+We also want to know how the smart speaker decides when to stop recording and transmitting to the cloud. Does it receive a stop command from the cloud, or does it stop on its own, either through detecting the end of the command through some heuristic or a simple time-out? In particular, if the ending condition is missed for whatever reason, how long will the smart speaker record and upload to the cloud before stopping? \textcolor{red}{We would imagine that Alexa stop recording when they first find a word that should not belong to the command or they just stop recording automatically (or after a few timeouts). We can infer the algorithm that Alexa uses and let user know how to protect their privacy.}
 
-Finally we want to detect if recordings are being made and sent to the cloud without being reported to the user by the service provider (e.g. through an app or API).
+Finally, \textcolor{red}{after a test, we find out that sometimes Alexa started recording by a word before the "wake up" command (i.e."Alexa") which made the command meaningless. We want to detect why this will happen and} if recordings are being made and sent to the cloud without being reported to the user by the service provider (e.g. through an app or API).
 
 \subsection{Devices}
 Our main device for testing will be the Amazon Echo, as it is the most popular smart speaker.
