@@ -16,3 +16,4 @@ project_proposal/iotrecording.pdf
 *.bbl
 *.blg
 *.fdb_latexmk
+*.pyc
