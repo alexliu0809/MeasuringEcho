@@ -2,7 +2,7 @@ from pythonping import ping
 import pyaudio
 import wave
 import sys
-import os
+from multiping import multi_ping
 
 class AudioPlayer():
     chunk = 1024
@@ -18,18 +18,12 @@ class AudioPlayer():
             output = True
         )
 
-    def play(self, start, end):
+    def play(self):
         """ Play entire file """
-        frame_rate = self.wf.getframerate()
-
-        start_frame = self.wf.setpos(int(frame_rate * start))
-
         data = self.wf.readframes(self.chunk)
-        current_pos = self.wf.tell()
-        while data != b'' and current_pos <= int(end * frame_rate):
+        while data != b'':
             self.stream.write(data)
             data = self.wf.readframes(self.chunk)
-            current_pos = self.wf.tell()
 
     def close(self):
         """ Graceful shutdown """
@@ -38,9 +32,9 @@ class AudioPlayer():
 
 if __name__ == "__main__":
     # Usage example for pyaudio
-    a = AudioPlayer("sample_1202.wav")
-    os.system("ping -c 1 1.1.1.1")
-    a.play(start = 9, end = 11.5) # 0 - 11.5, 9 - 11.5.
-    os.system("ping -c 1 8.8.4.4")
-    #a.close()
+    a = AudioPlayer("sample.wav")
+    #ping("1.1.1.1",count=1)
+    a.play()
+    #ping("8.8.8.8",count=1)
+    a.close()
 

@@ -9,13 +9,13 @@ import audioop
 import math
 from collections import deque
 import time
-from pythonping import ping
+import os
 
-NOISE_THRESHOLD = 800
+NOISE_THRESHOLD = 3000
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
-RATE = 16000
+RATE = 23000
 CHANNELS = 1
 
 SILENCE_LIMIT = 1
@@ -59,19 +59,19 @@ def listen_for_speech():
         #print slid_win[-1]
         if(sum([x > NOISE_THRESHOLD for x in slid_win]) > 0):
             if(not started):
-                print("Starting record of phrase")
+                print("Starting record of phrase: {}".format(time.time()))
+                os.system("ping -c 1 8.8.8.8")
                 started = True
             audio2send.append(cur_data)
         elif (started is True):
-            ping("9.9.9.9",count=1)
-            print("Finished")
+            print("Done recording: {}".format(time.time()))
+            os.system("ping -c 1 9.9.9.9")
             # The limit was reached, finish capture and deliver.
             filename = save_speech(list(prev_audio) + audio2send, p)
             break
         else:
             prev_audio.append(cur_data)
 
-    print("* Done recording")
     stream.close()
     p.terminate()
 
@@ -124,5 +124,5 @@ def audio_int(num_samples=50):
     return r
 
 if __name__ == '__main__':
-    a = audio_int()
-    
+    #a = AudioRecorder()
+    audio_int()
