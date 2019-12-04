@@ -10,7 +10,7 @@ if __name__ == "__main__":
         a = AudioPlayer("sample_1202.wav")
         print("Start Playing: {}".format(time.time()))
         os.system("ping -c 1 1.1.1.1") # punch play start
-        a.play(start = 9, end = 11.5)
+        a.play(start = 0, end = 11.5)
         print("End Playing: {}".format(time.time()))
         os.system("ping -c 1 8.8.4.4") # punch play end
         a.close()

@@ -15,7 +15,7 @@ NOISE_THRESHOLD = 3000
 
 CHUNK = 1024
 FORMAT = pyaudio.paInt16
-RATE = 23000
+RATE = 44100
 CHANNELS = 1
 
 SILENCE_LIMIT = 1
@@ -87,7 +87,7 @@ def save_speech(data, p):
     wf = wave.open(filename + '.wav', 'wb')
     wf.setnchannels(1)
     wf.setsampwidth(p.get_sample_size(pyaudio.paInt16))
-    wf.setframerate(16000)  # TODO make this value a function parameter?
+    wf.setframerate(RATE)  # TODO make this value a function parameter?
     wf.writeframes(data)
     wf.close()
     return filename + '.wav'
