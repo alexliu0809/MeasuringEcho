@@ -16,5 +16,6 @@ project_proposal/iotrecording.pdf
 *.bbl
 *.blg
 *.fdb_latexmk
+measurement/data/
 *.pyc
 *.wav
