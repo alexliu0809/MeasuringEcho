@@ -8,6 +8,7 @@ import pyshark
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from scipy import stats
 
 def get_time_secs(packet, start_time):
     time = packet.sniff_time-start_time
@@ -16,10 +17,11 @@ def get_time_secs(packet, start_time):
 
 # set filename(s) to scan
 script_dir = os.path.dirname(os.path.abspath(__file__))
-base_dir = os.path.abspath(script_dir + '/../data')
-filenames = ['output_ping_new_overnight.pcapng']
+base_dir = os.path.abspath(script_dir + '/../data/maindata')
+filenames = ['1202/output_ping_new_overnight.pcapng',
+             '1204/output_whole_prefix_overnight.pcapng']
 filenames = [base_dir + '/' + f for f in filenames]
-filename = filenames[0]
+filename = filenames[1]
 
 # set filter for wireshark capture
 disp_filter = 'ip and !dns'
@@ -85,7 +87,9 @@ for n,p in enumerate(cap):
     # end a test frame (on start of echo reply)
     if p.ip.src == pi_ip and p.ip.dst == ping3_ip:
         print('End: {}, {}'.format(n, p.number))
-        assert in_frame == 1
+        if in_frame != 1:
+            print("Frame end encountered before start, skipping")
+            continue
         in_frame = 0
 
         # add ping destination to list (to make visualization easier)
@@ -242,23 +246,100 @@ for frame in range(len(out_times)):
 total_size_out = []
 total_size_in = []
 
+# get sum of data for each test frame
 for x in out_sizes:
     total_size_out.append(np.sum(np.sum(x)))
 for x in in_sizes:
     total_size_in.append(np.sum(np.sum(x)))
 
+# do some filtering (z-value method)
+# def filt(x, z):
+#     if z < 3:
+#         return x
+#     else:
+#         return np.nan
+
+# z_out = np.abs(stats.zscore(total_size_out))
+# total_size_out_filt = [filt(x,z) for z,x in zip(z_out, total_size_out)]
+# z_in = np.abs(stats.zscore(total_size_in))
+# total_size_in_filt = [filt(x,z) for z,x in zip(z_in, total_size_in)]
+
+# do some filtering (IQR method)
+def filt(x, q1, q3, iqr):
+    if x > q1-1.5*iqr and x < q3+1.5*iqr:
+        return x
+    else:
+        return np.nan
+
+q1_out = np.quantile(total_size_out, 0.25)
+q3_out = np.quantile(total_size_out, 0.75)
+iqr_out = q3_out-q1_out
+total_size_out_filt = [filt(x, q1_out, q3_out, iqr_out) for x in total_size_out]
+
+q1_in = np.quantile(total_size_in, 0.25)
+q3_in = np.quantile(total_size_in, 0.75)
+iqr_in = q3_in-q1_in
+total_size_in_filt = [filt(x, q1_in, q3_in, iqr_in) for x in total_size_in]
+
+
 # plot total data size for all test frames
 plt.figure()
 plt.subplot(2,1,1)
-plt.plot(total_size_out, '*')
-plt.ylim(40000,75000)
+plt.plot(total_size_out_filt, '*')
+# plt.ylim(40000,75000)
 plt.xlabel('Test number')
-plt.ylabel('Outgoing data size')
+plt.ylabel('Outgoing data size (bytes)')
 plt.subplot(2,1,2)
-plt.plot(total_size_in, '*')
+plt.plot(total_size_in_filt, '*')
 plt.xlabel('Test number')
-plt.ylabel('Incoming data size')
+plt.ylabel('Incoming data size (bytes)')
 plt.tight_layout()
 plt.show()
+
+# # plot histograms
+num_bins = 20
+plt.figure()
+plt.subplot(2,1,1)
+plt.hist(total_size_out_filt, num_bins)
+plt.xlabel('Outgoing data size (bytes)')
+plt.ylabel('Frequency')
+plt.subplot(2,1,2)
+plt.hist(total_size_in_filt, num_bins)
+plt.xlabel('Incoming data size (bytes)')
+plt.ylabel('Frequency')
+plt.tight_layout()
+plt.show()
+
+# %%
+## STATISTICS BY PREFIX LENGTH
+num_tests = 19
+prefix_times = 9 - np.linspace(0, 9, num_tests) # 0.5s spacing
+prefix_times = np.roll(prefix_times, -1)
+
+# calculate mean and std across each prefix length (stride across data)
+means_out = []
+stds_out = []
+means_in = []
+stds_in = []
+for i in range(num_tests):
+    means_out.append(np.nanmean(total_size_out_filt[i::num_tests]))
+    stds_out.append(np.nanstd(total_size_out_filt[i::num_tests]))
+    means_in.append(np.nanmean(total_size_in_filt[i::num_tests]))
+    stds_in.append(np.nanstd(total_size_in_filt[i::num_tests]))
+
+# plot average size with error bars against prefix length
+plt.figure()
+plt.errorbar(prefix_times, means_out, yerr=stds_out, fmt='*')
+plt.xlabel('Prefix Time (s)')
+plt.ylabel('Average Outgoing Data Size (bytes)')
+plt.show()
+
+plt.figure()
+plt.errorbar(prefix_times, means_in, yerr=stds_in, fmt='*')
+plt.xlabel('Prefix Time (s)')
+plt.ylabel('Average Incoming Data Size (bytes)')
+plt.show()
+
+
 
 # %%
