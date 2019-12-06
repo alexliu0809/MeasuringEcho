@@ -19,9 +19,10 @@ def get_time_secs(packet, start_time):
 script_dir = os.path.dirname(os.path.abspath(__file__))
 base_dir = os.path.abspath(script_dir + '/../data/maindata')
 filenames = ['1202/output_ping_new_overnight.pcapng',
-             '1204/output_whole_prefix_overnight.pcapng']
+             '1204/output_whole_prefix_overnight.pcapng',
+             '1205/overnight_whole_2alter_prefix.pcapng']
 filenames = [base_dir + '/' + f for f in filenames]
-filename = filenames[1]
+filename = filenames[2]
 
 # set filter for wireshark capture
 disp_filter = 'ip and !dns'
@@ -312,9 +313,11 @@ plt.show()
 
 # %%
 ## STATISTICS BY PREFIX LENGTH
-num_tests = 19
-prefix_times = 9 - np.linspace(0, 9, num_tests) # 0.5s spacing
-prefix_times = np.roll(prefix_times, -1)
+# num_tests = 19
+# prefix_times = 9 - np.linspace(0, 9, num_tests) # 0.5s spacing
+# prefix_times = np.roll(prefix_times, -1)
+num_tests = 2
+prefix_times = [9,0]
 
 # calculate mean and std across each prefix length (stride across data)
 means_out = []
