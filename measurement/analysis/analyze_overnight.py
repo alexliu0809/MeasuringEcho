@@ -79,7 +79,9 @@ for n,p in enumerate(cap):
     # start a test frame (on start of recording playback)
     if p.ip.src == pi_ip and p.ip.dst == ping1_ip:
         print('Start: {}, {}'.format(n, p.number))
-        assert in_frame == 0
+        if in_frame != 0:
+            print("Frame end not encountered, starting new test frame")
+            frame = frame + 1
         in_frame = 1
         
         # add frame to list
@@ -366,6 +368,68 @@ plt.xlabel('Postfix Time (s)')
 plt.ylabel('Average Incoming Data Size (bytes)')
 plt.show()
 
+
+
+# %%
+## STATISTICS BY PREFIX LENGTH SEPARATE PLOTS FOR RESPONSE/NO RESP
+# num_tests = 19
+# prefix_times = 9 - np.linspace(0, 9, num_tests) # 0.5s spacing
+# prefix_times = np.roll(prefix_times, -1)
+
+def sep(x, i, retResp):
+    if ping3_ip in out_dsts[init_skip+i]:
+        if retResp == True:
+            return x
+        else:
+            return np.nan
+    else:
+        if retResp == True:
+            return np.nan
+        else:
+            return x
+
+# split into resp sizes and no resp sizes
+resp_sizes_out = [sep(x,i,True) for i,x in enumerate(total_size_out_filt)]
+noresp_sizes_out = [sep(x,i,False) for i,x in enumerate(total_size_out_filt)]
+resp_sizes_in = [sep(x,i,True) for i,x in enumerate(total_size_in_filt)]
+noresp_sizes_in = [sep(x,i,False) for i,x in enumerate(total_size_in_filt)]
+
+# calculate mean and std across each prefix length (stride across data)
+resp_means_out = []
+resp_stds_out = []
+resp_means_in = []
+resp_stds_in = []
+for i in range(num_tests):
+    resp_means_out.append(np.nanmean(resp_sizes_out[i::num_tests]))
+    resp_stds_out.append(np.nanstd(resp_sizes_out[i::num_tests]))
+    resp_means_in.append(np.nanmean(resp_sizes_in[i::num_tests]))
+    resp_stds_in.append(np.nanstd(resp_sizes_in[i::num_tests]))
+noresp_means_out = []
+noresp_stds_out = []
+noresp_means_in = []
+noresp_stds_in = []
+for i in range(num_tests):
+    noresp_means_out.append(np.nanmean(noresp_sizes_out[i::num_tests]))
+    noresp_stds_out.append(np.nanstd(noresp_sizes_out[i::num_tests]))
+    noresp_means_in.append(np.nanmean(noresp_sizes_in[i::num_tests]))
+    noresp_stds_in.append(np.nanstd(noresp_sizes_in[i::num_tests]))   
+
+# plot average size with error bars against prefix length
+plt.figure()
+plt.errorbar(prefix_times, resp_means_out, yerr=resp_stds_out, fmt='*')
+plt.errorbar(prefix_times, noresp_means_out, yerr=noresp_stds_out, fmt='*')
+plt.legend(['Response', 'No response'])
+plt.xlabel('Postfix Time (s)')
+plt.ylabel('Average Outgoing Data Size (bytes)')
+plt.show()
+
+plt.figure()
+plt.errorbar(prefix_times, resp_means_in, yerr=resp_stds_in, fmt='*')
+plt.errorbar(prefix_times, noresp_means_in, yerr=noresp_stds_in, fmt='*')
+plt.legend(['Response', 'No response'])
+plt.xlabel('Postfix Time (s)')
+plt.ylabel('Average Incoming Data Size (bytes)')
+plt.show()
 
 
 # %%
