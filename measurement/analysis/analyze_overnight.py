@@ -15,14 +15,37 @@ def get_time_secs(packet, start_time):
     time = time.seconds+time.microseconds/1e6
     return time
 
+# set file number to analyze (see filenames below)
+file_test_number = 5
+
 # set filename(s) to scan
 script_dir = os.path.dirname(os.path.abspath(__file__))
 base_dir = os.path.abspath(script_dir + '/../data/maindata')
 filenames = ['1202/output_ping_new_overnight.pcapng',
              '1204/output_whole_prefix_overnight.pcapng',
-             '1205/overnight_whole_2alter_prefix.pcapng']
+             '1205/overnight_whole_2alter_prefix.pcapng',
+             '1206/output_whole_postfix_overnight.pcapng',
+             '1207/output_whole_nonpause_postfix.pcapng',
+             '1207night/output_whole_silence_gap_overnight.pcapng']
 filenames = [base_dir + '/' + f for f in filenames]
-filename = filenames[2]
+filename = filenames[file_test_number]
+
+# other test specific params
+init_skip_a = [0, 0, 0, 0, 3, 0]
+num_tests_a = [1, 19, 2, 3, 4, 8]
+prefix_times_a = [[0],
+                  [8.5, 8, 7.5, 7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0, 9],
+                  [9,0],
+                  [0, 0.5, 1],
+                  [0,1,2,3],
+                  [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]]
+                  
+
+
+init_skip = init_skip_a[file_test_number]
+num_tests = num_tests_a[file_test_number]
+prefix_times = prefix_times_a[file_test_number]
+
 
 # set filter for wireshark capture
 disp_filter = 'ip and !dns'
@@ -248,10 +271,12 @@ total_size_out = []
 total_size_in = []
 
 # get sum of data for each test frame
-for x in out_sizes:
-    total_size_out.append(np.sum(np.sum(x)))
-for x in in_sizes:
-    total_size_in.append(np.sum(np.sum(x)))
+for x in out_sizes[init_skip:]:
+    # total_size_out.append(np.sum(np.sum(x)))
+    total_size_out.append(np.max([np.sum(y) for y in x]))
+for x in in_sizes[init_skip:]:
+    # total_size_in.append(np.sum(np.sum(x)))
+    total_size_in.append(np.max([np.sum(y) for y in x]))
 
 # do some filtering (z-value method)
 # def filt(x, z):
@@ -316,8 +341,6 @@ plt.show()
 # num_tests = 19
 # prefix_times = 9 - np.linspace(0, 9, num_tests) # 0.5s spacing
 # prefix_times = np.roll(prefix_times, -1)
-num_tests = 2
-prefix_times = [9,0]
 
 # calculate mean and std across each prefix length (stride across data)
 means_out = []
@@ -333,13 +356,13 @@ for i in range(num_tests):
 # plot average size with error bars against prefix length
 plt.figure()
 plt.errorbar(prefix_times, means_out, yerr=stds_out, fmt='*')
-plt.xlabel('Prefix Time (s)')
+plt.xlabel('Postfix Time (s)')
 plt.ylabel('Average Outgoing Data Size (bytes)')
 plt.show()
 
 plt.figure()
 plt.errorbar(prefix_times, means_in, yerr=stds_in, fmt='*')
-plt.xlabel('Prefix Time (s)')
+plt.xlabel('Postfix Time (s)')
 plt.ylabel('Average Incoming Data Size (bytes)')
 plt.show()
 
