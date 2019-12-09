@@ -20,3 +20,6 @@ project_submission/iotrecording.pdf
 measurement/data/
 *.pyc
 *.wav
+*.dvi
+*.ilg
+
