@@ -1,0 +1,39 @@
+\documentclass[sigconf,anonymous=false]{acmart}
+
+%\fancyhf{} % Remove fancy page headers 
+%\fancyhead[C]{Anonymous submission \#9999 to ACM CCS 2019} % TODO: replace 9999 with your paper number
+%\fancyfoot[C]{\thepage}
+
+%\setcopyright{none} % No copyright notice required for submissions
+%\acmConference[Anonymous Submission to ACM CCS 2019]{ACM Conference on Computer and Communications Security}{Due 15 May 2019}{London, TBD}
+%\acmYear{2019}
+
+\settopmatter{printacmref=false, printccs=false, printfolios=false} % We want page numbers on submissions
+\definecolor{Orange}{rgb}{1,0.5,0}
+\usepackage{xcolor}
+\newcommand{\todo}[1]{\textsf{\textbf{\textcolor{Orange}{[[#1]]}}}}
+
+\begin{document}
+\title{Measuring How Much IoT Devices Upload via Traffic Analysis} % TODO: replace with your title
+\author{Enze Liu, TJ Smith, Zesen Zhang}
+%\orcid{0000-0000-0000}
+\affiliation{%
+  \institution{University of California, San Diego}
+}
+\email{{e7liu, tjs003, zez003}@eng.ucsd.edu}
+
+\input{abs}
+
+\ccsdesc{Security and privacy~Use https://dl.acm.org/ccs.cfm to generate actual concepts section for your paper}
+% -- end of section to replace with generated code
+
+%\keywords{template; formatting; pickling} % TODO: replace with your keywords
+
+\maketitle
+
+\input{body} % TODO: replace with your brilliant paper!
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{iotrecording}
+
+\end{document}

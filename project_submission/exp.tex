@@ -1,0 +1,14 @@
+\section{Experiment Setup}
+
+We will begin by measuring the baseline traffic from the smart speaker in a silent environment. This should allow us to identify the regular traffic patterns of the smart speaker when it is not transmitting voice data. %We will then test several basic pre-recorded commands with the smart speaker to identify the basic traffic signature of the speaker when it is transmitting voice data.
+
+Once we have baseline traffic patterns we will begin more detailed measurements. We will test pre-recorded commands of varying lengths many times, to establish correlations between recording length and traffic speed and/or duration. We will then repeat these tests in the presence of several different forms of background noise, including at least podcasts, music, and discussion among ourselves. %We will not perform any tests in public environments to avoid any possible ethical considerations.
+
+To determine how the speaker decides to terminate its recording, we will use several different pathological commands. We will use incomplete commands, very long commands, and commands spoken very unclearly. By correlating the traffic patterns of these commands to the more normal commands previously measured, we hope to calculate the rough length of time the recording lasts.
+
+We will obtain whatever information we can from the cloud (e.g. through an app or API) to compare such information to our traffic pattern analysis and determine whether they match within whatever margin of error we can achieve. We will also test the behavior of the speaker in noisy environments without any commands being given to determine the rate of false recordings.
+
+\subsection{Devices}
+Our main device for testing will be the Amazon Echo, as it is the most popular smart speaker.
+
+If available, we would also like to test the Apple HomePod, as Apple places a much greater emphasis on security and privacy than its competitors.
