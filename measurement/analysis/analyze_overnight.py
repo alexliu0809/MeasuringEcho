@@ -297,6 +297,7 @@ def filt(x, q1, q3, iqr):
     if x > q1-1.5*iqr and x < q3+1.5*iqr:
         return x
     else:
+        print('Filtered value {}'.format(x))
         return np.nan
 
 q1_out = np.quantile(total_size_out, 0.25)
@@ -412,14 +413,21 @@ for i in range(num_tests):
     noresp_means_out.append(np.nanmean(noresp_sizes_out[i::num_tests]))
     noresp_stds_out.append(np.nanstd(noresp_sizes_out[i::num_tests]))
     noresp_means_in.append(np.nanmean(noresp_sizes_in[i::num_tests]))
-    noresp_stds_in.append(np.nanstd(noresp_sizes_in[i::num_tests]))   
+    noresp_stds_in.append(np.nanstd(noresp_sizes_in[i::num_tests]))
+
+resp_counts = []
+noresp_counts = []
+for i in range(num_tests):
+    resp_counts.append(np.sum([1 for x in resp_sizes_out[i::num_tests] if np.isfinite(x)]))
+    noresp_counts.append(np.sum([1 for x in noresp_sizes_out[i::num_tests] if np.isfinite(x)]))
+    
 
 # plot average size with error bars against prefix length
 plt.figure()
 plt.errorbar(prefix_times, resp_means_out, yerr=resp_stds_out, fmt='*')
 plt.errorbar(prefix_times, noresp_means_out, yerr=noresp_stds_out, fmt='*')
 plt.legend(['Response', 'No response'])
-plt.xlabel('Postfix Time (s)')
+plt.xlabel('Time Gap (s)')
 plt.ylabel('Average Outgoing Data Size (bytes)')
 plt.show()
 
@@ -427,8 +435,17 @@ plt.figure()
 plt.errorbar(prefix_times, resp_means_in, yerr=resp_stds_in, fmt='*')
 plt.errorbar(prefix_times, noresp_means_in, yerr=noresp_stds_in, fmt='*')
 plt.legend(['Response', 'No response'])
-plt.xlabel('Postfix Time (s)')
+plt.xlabel('Time Gap (s)')
 plt.ylabel('Average Incoming Data Size (bytes)')
+plt.show()
+
+plt.figure()
+plt.bar(prefix_times, resp_counts, width = 0.08)
+plt.bar(prefix_times, noresp_counts, width = 0.08, bottom=resp_counts)
+plt.legend(['Response', 'No response'])
+plt.xlabel('Time Gap (s)')
+plt.ylabel('Response Breakdown')
+plt.ylim(top=16)
 plt.show()
 
 
