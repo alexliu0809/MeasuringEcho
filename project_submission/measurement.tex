@@ -36,11 +36,11 @@ Fig.~\ref{fig:prefix_many} shows the result of this experiment. It clearly shows
 
 \subsection{"Postfix" Experiment}
   
-We also want to measure whether Alexa will keep transmitting packages even if Alexa has noticed the whole command and started replying. The assumption here is that, as Alexa has started replying, it means Alexa has fully recognized the whole command and it should not transmit the rest of the sentence onto the server. The experiment fits a real life situation where someone sends a command to Alexa and starts another conversation with others immediately. If Alexa transmits the rest of the conversation, it would definitely raise a privacy concern.
+We also want to measure whether Alexa will keep transmitting packages even if Alexa has noticed the whole command and started replying. The assumption here is that if Alexa has started replying, then Alexa has fully recognized the whole command and the Echo should not transmit anything else to the server. The experiment fits a real life situation where someone sends a command to Alexa and starts another conversation with others immediately. If Alexa transmits the rest or part of that conversation, it would definitely raise a privacy concern.
 
-Here, we use "Alexa, where is New York City" as a command sentence and add a 1~s postfix sentence. We gave an approximately 0.5~s gap between the command and postfix sentence to simulate the normal silent gap when people finished a sentence. Then we started playing three different kinds of sentences which are: a) command voice b) command voice with 0.5~s postfix sentence and c) command voice with 1~s postfix sentence.
+Here we use, "Alexa, where is New York City?" as a command sentence and add a 1~s postfix sentence. We gave an approximately 0.5~s gap between the command and postfix sentence to simulate the normal silent gap when people finish a sentence. Then we started playing three different audio clips: a) the command alone, b) the command with a 0.5~s postfix sentence, and c) the command with a 1~s postfix sentence.
 
-Fig.~\ref{fig:postfix_gap} shows that again, there is no significant difference between the three trials that we run here. This confirms that the Echo does what we would like it to do, and stops transmitting as soon as it has detected the end of the command.
+Fig.~\ref{fig:postfix_gap} shows that, again, there is no significant difference between the three trials that we run here. This confirms that the Echo does what we would like it to do and stops transmitting as soon as it has detected the end of the command.
 
 \begin{figure}[!t]
     \centering
@@ -51,9 +51,9 @@ Fig.~\ref{fig:postfix_gap} shows that again, there is no significant difference 
 
 
 
-We expect, however, that the 0.5~s silence gap between command and postfix sentence is necessary for Alexa to realize the command is over. Here, we played the command with postfix sentence immediately (i.e. delete the silence gap between postfix sentence and command.). We try to find out whether Alexa would automatically cut off the voice once it recognized the following sentence is meaningless. We played command with 0, 1, 2, and 3~s postfix sentences, which contain nonsense speech, to see whether Alexa would cut off the transmission itself.
+We expect, however, that the 0.5~s silent gap between command and postfix sentence is necessary for Alexa to realize the command is over. W ran another experiment where we played the command with postfix sentence immediately (\textit{i.e.}, we deleted the gap between postfix sentence and command.). We try to find out whether Alexa would automatically cut off the voice once it recognized that the following sentence was meaningless. We played the command with 0, 1, 2, and 3~s postfix sentences, which contain nonsense speech, to see whether Alexa would cut off the transmission itself.
 
-Fig.~\ref{fig:postfix_nogap} confirms our assumption that Alexa needs some kind of gap to recognize the end of a sentence. Without such a gap, the data clearly shows that the total transmitted data grows directly with the length of the postfix. This indicates that the Echo is recording the entire command with the postfix and transmitting the entire thing to the Amazon server.
+Fig.~\ref{fig:postfix_nogap} confirms our assumption that Alexa needs some kind of gap to recognize the end of a sentence. Without such a gap, the results clearly show that the total transmitted data grows directly with the length of the postfix. This indicates that the Echo is recording the entire command with the postfix and transmitting the entire thing to the Amazon server.
 
 
 \begin{figure}[!t]
@@ -63,39 +63,39 @@ Fig.~\ref{fig:postfix_nogap} confirms our assumption that Alexa needs some kind 
     \label{fig:postfix_nogap}
 \end{figure}
 
-The previous two experiments raise the question of how long, exactly, does Alexa need to detect that a command is over and should therefore stop recording. We might want to know this so we know how long we need to pause before we start our conversation to let Alexa aware that the command is over and avoid Alexa transmitting our private conversation onto the Amazon server.
+The previous two experiments raise the question of how long, exactly, does Alexa need to detect that a command is over and should therefore stop recording. We might want to know this so we know how long we need to pause before we start our conversation to let Alexa know that the command is over and can avoid Alexa transmitting our private conversation onto the Amazon server. 
 
-We attempt to determine this by playing the command with different silence gap before playing the whole postfix sentence, to figure out when Alexa would reply a right answer to our command. We tried adding a silence gap between command and postfix sentence that ranged from 0.1 to 0.8~s with a 0.1~s step.
+We attempt to determine this by playing the command with different silent gaps before playing the postfix sentence, to figure out when Alexa would reply correctly to our command. We added gaps that ranged from 0.1 to 0.8~s with 0.1~s steps.
 
-Fig.~\ref{fig:gap} shows the results from this experiment. The blue chunk means Alexa does not respond to the sentence at all. The orange chunk means Alexa responds, but only after the entire postfix plays, and does not know what the command was supposed to be. The green chunk means Alexa noticed the end of the command correctly and immediately replied to that part instead of to the entire sentence. We can see that Alexa does not start correctly detecting the end of the command until at lease a 0.5~s gap occurs, and the gap needs to be at least 0.7~s to ensure that Alexa will correctly detect the end, and not transmit any potentially private conversation.
+Fig.~\ref{fig:gap} shows the results from this experiment. The blue indicates that Alexa does not respond to the sentence at all. The orange indicates that Alexa responds, but only after the entire postfix plays, and does not know what the command was supposed to be. The green indicates that Alexa noticed the end of the command correctly and immediately replied to that part instead of to the entire sentence. We can see that Alexa does not start correctly detecting the end of the command until at least a 0.5~s gap occurs, and the gap needs to be at least 0.7~s to ensure that Alexa will correctly detect the end, and not transmit any potentially private conversation.
 
 \begin{figure}[!t]
 	\centering
 	\includegraphics[scale=0.4]{../measurement/results/1207night/reply_type_breakdown}
-	\caption{Bar plot showing how often Alexa replied correctly to a command for different gap lengths between the command and non-command speech.}
+	\caption{Bar plot showing how often Alexa replied correctly to a command, plotted for different gap lengths between the command and non-command speech.}
 	\label{fig:gap}
 	\vspace{-3mm}
 	\end{figure}
 
-To confirm our results, we record the total data that the Amazon server sent back to the Echo and we could see a significant difference among "non-response" packages, "error response" packages, and "correct response" packages, as shown in Fig.~\ref{fig:postfix_variablegap_sizes}. The blue data points indicate the "non-response" experiment trials, the orange data points indicate the "error response" trials, and the the green ones indicate the "correct response" trials. We can clearly see the three levels of data, indicating separate responses to the voice command.
+To confirm our results, we recorded the total data that the Amazon server sent back to the Echo. We could see a significant difference among "non-response" packages, "error response" packages, and "correct response" packages, as shown in Fig.~\ref{fig:postfix_variablegap_sizes}. The blue data points indicate the "non-response" experiment trials, the orange data points indicate the "error response" trials, and the the green ones indicate the "correct response" trials. We can clearly see the three levels of data, indicating separate responses to the voice command.
 
 \begin{figure}[!t]
     \centering
     \includegraphics[width=\linewidth]{1207night/in_data_vs_gap_by_reply_type}
-    \caption{Plot of the total outgoing data size against the length of the gap before non-command speech is played a command. The error bars extend to one standard deviation in either direction. Total outgoing data size is calculated as the sum of the TLS packet payload lengths going to the destination IP address with the greatest such sum.}
+    \caption{Plot of the total outgoing data size against the length of the gap before non-command speech is played after command. The error bars extend to one standard deviation in either direction. Total outgoing data size is calculated as the sum of the TLS packet payload lengths going to the destination IP address with the greatest such sum.}
     \label{fig:postfix_variablegap_sizes}
 \end{figure}
 
 
 \subsection{"Stop" Experiment}
 
-Following up the above experiment, in this part, we would like to detect how Alexa detects the end of a command. We would like to see whether Alexa stops because of silence or some other detection method.
+Following up on the above experiment, in this part, we study how Alexa detects the end of a command. We attempt to determine whether Alexa stops because of silence or becuase of some other detection method.
 
-We tried three experiments here: a) We played background music while playing the command voice and kept playing for a while to see whether Alexa would stop transmitting packages and start replying to the command. This experiment can help us figure out whether Alexa can detect the end of speech even without silence; b) We played the command voice with a background conversation simulating the situation in real life. For example, in a family, if the  father asks something to Alexa while the mother is talking to the child. The father's voice is louder, but the conversation between mother and child will keep going after the father finishes his command. Therefore, we would like to figure out whether Alexa can detect the end of the father's command. c) We start talking immediately after the wake up world and keep talking for a while without stopping to simulate a situation where in a party there is some conversation happening around Alexa, with no natural breaks (due to multiple conversations overlapping). And we want to figure out whether Alexa would stop recording automatically or will keep recording all of the sentences.
+We tried three experiments here: a) We played background music while playing the command and kept playing the music for a while after the command ended to see if Alexa would stop transmitting packages and start replying to the command. This experiment can help us figure out if Alexa can detect the end of speech even without silence. b) We played the command with a background conversation simulating a situation in real life. For example, in a family, the father might ask Alexa something while the mother is talking to the child. The father's voice is louder, but the conversation between mother and child will keep going after the father finishes his command. Therefore, we would like to figure out whether Alexa can detect the end of the father's command. c) We start talking immediately after the wake up word and keep talking for a while without stopping to simulate a situation where in a party there is some conversation happening around Alexa with no natural breaks (due to multiple conversations overlapping). We want to figure out whether Alexa would stop recording automatically or will keep recording all of the sentences.
 
-In the first experiment, where we played background music while talking to Alexa, we found out that Alexa would stop transmitting packages to Amazon server and start replying, even though the music is still playing. This means Alexa can distinguish light music from human voice.
+In the first experiment, where we played background music while talking to Alexa, we found that Alexa would stop transmitting packages to Amazon server and start replying, even though the music was still playing. This means Alexa can distinguish music from human voice.
 
-However, when we played the command voice with some conversation in the background and keep the background conversation going after the command, we found out that Alexa would keep recording if there were no significant silent gap in the whole conversation, even though the conversation and command were generated by different people. As a result, Alexa is not able to detect different peoples' voices and stop automatically. This would indicate that we should be wary of starting a new conversation while someone is using Alexa, as our conversation could be recorded by Alexa well past the end of the command to Alexa. 
+However, when we played the command with some conversation in the background and kept the background conversation going after the command, we found that Alexa would keep recording if there were no significant silent gap in the conversation, even though the conversation and command were generated by different people. Therefore, Alexa is not able to detect different peoples' voices and stop automatically. This indicates that we should be wary of starting a new conversation while someone is using Alexa, as our conversation could be recorded by Alexa well past the end of the command to Alexa. 
 
-Further, to simulating the situation that few conversation happens around Alexa and someone waked up Alexa accidentally, we played a full meaningless sentence with the wake-up word in the beginning and then without any pause in it. When we played a 18s sentence, Alexa stopped at seemingly random points between 6--15~s into the sentence, before it actually ends. This seems to indicate that Alexa tires to protect privacy, once she determines the voice is meaningless.
+To simulating the situation that a few conversations are happening around Alexa and someone wakes up Alexa accidentally, we played a meaningless phrase with the wake-up word at the beginning and then no pause in it. When we played an 18~s sentence, Alexa stopped at seemingly random points between 6--15~s into the sentence, before it actually ended. This seems to indicate that Alexa tries to protect privacy, once she determines the voice is meaningless.
 
