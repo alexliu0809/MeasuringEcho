@@ -16,7 +16,7 @@ def get_time_secs(packet, start_time):
     return time
 
 # set file number to analyze (see filenames below)
-file_test_number = 5
+file_test_number = 3
 
 # set filename(s) to scan
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -38,6 +38,15 @@ savedirs = ['../../results/1202/',
             '../../results/1207night/']
 savedirs = [base_dir + '/' + f for f in savedirs]
 savedir = savedirs[file_test_number]
+
+# set plot xlabels
+xlabels = ['',
+           'Prefix Length (s)',
+           'Prefix Length (s)',
+           'Postfix Length (s)',
+           'Postfix Length (s)',
+           'Time Gap (s)']
+xlabel = xlabels[file_test_number]
 
 # other test specific params
 init_skip_a = [0, 0, 0, 0, 3, 0]
@@ -310,10 +319,10 @@ total_size_in = []
 # get sum of data for each test frame
 for x in out_sizes[init_skip:]:
     # total_size_out.append(np.sum(np.sum(x)))
-    total_size_out.append(np.max([np.sum(y) for y in x]))
+    total_size_out.append(np.max([np.sum(y) for y in x])/1e3)
 for x in in_sizes[init_skip:]:
     # total_size_in.append(np.sum(np.sum(x)))
-    total_size_in.append(np.max([np.sum(y) for y in x]))
+    total_size_in.append(np.max([np.sum(y) for y in x])/1e3)
 
 # do some filtering (z-value method)
 # def filt(x, z):
@@ -329,7 +338,8 @@ for x in in_sizes[init_skip:]:
 
 # do some filtering (IQR method)
 def filt(x, q1, q3, iqr):
-    if x > q1-1.5*iqr and x < q3+1.5*iqr:
+    iqr_thresh = 1.5
+    if x > q1-iqr_thresh*iqr and x < q3+iqr_thresh*iqr:
         return x
     else:
         print('Filtered value {}'.format(x))
@@ -351,12 +361,12 @@ plt.figure()
 plt.subplot(2,1,1)
 plt.plot(total_size_out_filt, '*')
 # plt.ylim(40000,75000)
-plt.xlabel('Test number')
-plt.ylabel('Outgoing data size (bytes)')
+plt.xlabel('Test Number')
+plt.ylabel('Outgoing Data Size (kB)')
 plt.subplot(2,1,2)
 plt.plot(total_size_in_filt, '*')
-plt.xlabel('Test number')
-plt.ylabel('Incoming data size (bytes)')
+plt.xlabel('Test Number')
+plt.ylabel('Incoming Data Size (kB)')
 plt.tight_layout()
 plt.show()
 
@@ -365,11 +375,11 @@ num_bins = 20
 plt.figure()
 plt.subplot(2,1,1)
 plt.hist(total_size_out_filt, num_bins)
-plt.xlabel('Outgoing data size (bytes)')
+plt.xlabel('Outgoing Data Size (kB)')
 plt.ylabel('Frequency')
 plt.subplot(2,1,2)
 plt.hist(total_size_in_filt, num_bins)
-plt.xlabel('Incoming data size (bytes)')
+plt.xlabel('Incoming Data Size (kB)')
 plt.ylabel('Frequency')
 plt.tight_layout()
 plt.show()
@@ -390,15 +400,43 @@ for i in range(num_tests):
 
 # plot average size with error bars against prefix length
 plt.figure()
-plt.errorbar(prefix_times, means_out, yerr=stds_out, fmt='*')
-plt.xlabel('Postfix Time (s)')
-plt.ylabel('Average Outgoing Data Size (bytes)')
+plt.errorbar(prefix_times, means_out, yerr=stds_out, fmt='*', capsize=4)
+# plt.errorbar([1,0], means_out, yerr=stds_out, fmt='*', capsize=4)
+# plt.xticks(ticks = [1,0], labels=prefix_times)
+# plt.xlim([-0.5, 1.5])
+plt.xlabel(xlabel)
+plt.ylabel('Average Outgoing Data Size (kB)')
 plt.show()
 
 plt.figure()
-plt.errorbar(prefix_times, means_in, yerr=stds_in, fmt='*')
-plt.xlabel('Postfix Time (s)')
-plt.ylabel('Average Incoming Data Size (bytes)')
+plt.errorbar(prefix_times, means_in, yerr=stds_in, fmt='*', capsize=4)
+# plt.errorbar([1,0], means_in, yerr=stds_in, fmt='*', capsize=4)
+# plt.xticks(ticks = [1,0], labels=prefix_times)
+# plt.xlim([-0.5, 1.5])
+plt.xlabel(xlabel)
+plt.ylabel('Average Incoming Data Size (kB)')
+plt.show()
+
+# %%
+## Print general statistics
+# equalvar_ttest = stats.ks_2samp([x for x in total_size_out_filt[0::num_tests] if np.isfinite(x)], \
+#                                 [x for x in total_size_out_filt[1::num_tests] if np.isfinite(x)])
+
+
+for i in range(num_tests):
+    print('Prefix: {}'.format(prefix_times[i]))
+    print('Mean: {}'.format(means_out[i]))
+    print('Standard deviation: {}'.format(stds_out[i]))
+    print('Median: {}'.format(np.median(total_size_out[i::num_tests])))
+
+# print('T-test equal population variance: {}'.format(equalvar_ttest))
+
+# Individual histograms
+plt.figure()
+plt.subplot(1,2,1)
+plt.hist(total_size_out_filt[0::num_tests])
+plt.subplot(1,2,2)
+plt.hist(total_size_out_filt[1::num_tests])
 plt.show()
 
 
@@ -453,26 +491,26 @@ for i in range(num_tests):
 
 # plot average size with error bars against prefix length
 plt.figure()
-plt.errorbar(prefix_times, resp_means_out, yerr=resp_stds_out, fmt='*')
-plt.errorbar(prefix_times, noresp_means_out, yerr=noresp_stds_out, fmt='*')
+plt.errorbar(prefix_times, resp_means_out, yerr=resp_stds_out, fmt='*', capsize=4)
+plt.errorbar(prefix_times, noresp_means_out, yerr=noresp_stds_out, fmt='*', capsize=4)
 plt.legend(['Response', 'No response'])
-plt.xlabel('Time Gap (s)')
-plt.ylabel('Average Outgoing Data Size (bytes)')
+plt.xlabel(xlabel)
+plt.ylabel('Average Outgoing Data Size (kB)')
 plt.show()
 
 plt.figure()
-plt.errorbar(prefix_times, resp_means_in, yerr=resp_stds_in, fmt='*')
-plt.errorbar(prefix_times, noresp_means_in, yerr=noresp_stds_in, fmt='*')
+plt.errorbar(prefix_times, resp_means_in, yerr=resp_stds_in, fmt='*', capsize=4)
+plt.errorbar(prefix_times, noresp_means_in, yerr=noresp_stds_in, fmt='*', capsize=4)
 plt.legend(['Response', 'No response'])
-plt.xlabel('Time Gap (s)')
-plt.ylabel('Average Incoming Data Size (bytes)')
+plt.xlabel(xlabel)
+plt.ylabel('Average Incoming Data Size (kB)')
 plt.show()
 
 plt.figure()
 plt.bar(prefix_times, resp_counts, width = 0.08)
 plt.bar(prefix_times, noresp_counts, width = 0.08, bottom=resp_counts)
 plt.legend(['Response', 'No response'])
-plt.xlabel('Time Gap (s)')
+plt.xlabel(xlabel)
 plt.ylabel('Response Breakdown')
 plt.ylim(top=16)
 plt.show()
@@ -481,7 +519,7 @@ plt.show()
 ## STATISTICS BY PREFIX LENGTH SEPARATE PLOTS FOR INCOMING RESPONSE SIZE
 
 def sep(x, i, level):
-    bounds = [0, 10000, 20000, 30000]
+    bounds = [0, 10, 20, 30]
     cmp_val = total_size_in_filt[i]
     if np.isnan(cmp_val):
         return np.nan
@@ -525,17 +563,17 @@ for j in range(3):
 # plot average size with error bars against prefix length
 plt.figure()
 for i in range(3):
-    plt.errorbar(prefix_times, split_means_out[i], yerr=split_stds_out[i], fmt='*')
+    plt.errorbar(prefix_times, split_means_out[i], yerr=split_stds_out[i], fmt='*', capsize=4)
 plt.legend(['No reply', 'Error reply', 'Correct reply'])
-plt.xlabel('Time Gap (s)')
+plt.xlabel(xlabel)
 plt.ylabel('Average Outgoing Data Size (bytes)')
 plt.show()
 
 plt.figure()
 for i in range(3):
-    plt.errorbar(prefix_times, split_means_in[i], yerr=split_stds_in[i], fmt='*')
+    plt.errorbar(prefix_times, split_means_in[i], yerr=split_stds_in[i], fmt='*', capsize=4)
 plt.legend(['No reply', 'Error reply', 'Correct reply'])
-plt.xlabel('Time Gap (s)')
+plt.xlabel(xlabel)
 plt.ylabel('Average Incoming Data Size (bytes)')
 plt.show()
 
@@ -544,7 +582,7 @@ plt.bar(prefix_times, split_counts[0], width = 0.08)
 plt.bar(prefix_times, split_counts[1], width = 0.08, bottom=split_counts[0])
 plt.bar(prefix_times, split_counts[2], width = 0.08, bottom=[sum(x) for x in zip(split_counts[0], split_counts[1])])
 plt.legend(['No reply', 'Error reply', 'Correct reply'], ncol=3)
-plt.xlabel('Time Gap (s)')
+plt.xlabel(xlabel)
 plt.ylabel('Reply Type Breakdown')
 plt.ylim(top=15)
 plt.show()
