@@ -19,7 +19,7 @@ We ran some experiments on Alexa and use Wireshark to see if Alexa recorded cons
 
 \subsection{Monitoring Set Up}
 
-In order to catch the packets that were sent out by Alexa to the Amazon cloud server, we set up a WiFi router on a desktop server and connected the Echo to it. We run Wireshark~\cite[wireshark] on the desktop server to capture all the packets to and from the Echo speaker.
+In order to catch the packets that were sent out by Alexa to the Amazon cloud server, we set up a WiFi router on a desktop server and connected the Echo to it. We run Wireshark~\cite{wireshark} on the desktop server to capture all the packets to and from the Echo speaker.
 
 Since we cannot directly examine the contents of the packets sent to and from the Echo, as they are all encrypted by TLS, we instead must examine coarser-grained information, like packet count, packet sizes, server ip addresses, and packet timing information. Since most of this kind of coarser-grained information is subject to variation based on network conditions, and the voice data itself is subject to variation based on environmental noise, we opt to repeat all of our experiments many times (10s to 100s) to draw statistical conclusions. 
 
