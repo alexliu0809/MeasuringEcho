@@ -7,7 +7,7 @@ This is where our work comes in. We designed and implemented experiments that al
 
 \textbf{Our first contribution: we confirmed that usually Echo only transmitted audio that happened after the wake word.} In this experiment, we used two segments from the prerecorded audio. The first audio segment (denoted as $I_1$) was about 2.5 seconds long and contained only the Echo command "Alexa, where is New York City?". The other audio segment (denoted as $I_2$) was about 11.5 seconds long, with a 9 seconds irrelevant conversation attached right before the Echo command. We played both $I_1$ and $I_2$ alternatively overnight for over 150 times, giving us in total more than 300 samples. For each sample, after data cleaning, we calculated the total size of all outgoing traffic. We then computed the mean and standard deviation of the total size across all samples respectively for $I_1$ and $I_2$, as shown in Table \ref{table1}. We did not observe any significant difference in the total size of outgoing packets between $I_1$ and $I_2$. Our hypothesis was that if Echo was sending any audio that happened before the wake word, we should be able to observe different total sizes of outgoing traffic for $I_1$ and $I_2$, which we did not. Thus, we concluded that nothing before the wake word was streamed to the server.
 
-\begin{table}[ht]
+\begin{table}[!b]
 \caption{Mean, standard deviation (SD), and median of total size (in kilobytes) of outbound traffic across all samples for $I_1$ and $I_2$ respectively}
 \begin{tabular}{l|l|l|l}
 Audio Input & Mean & SD & Median \\
