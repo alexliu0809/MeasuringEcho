@@ -16,7 +16,7 @@ def get_time_secs(packet, start_time):
     return time
 
 # set file number to analyze (see filenames below)
-file_test_number = 3
+file_test_number = 6
 
 # set filename(s) to scan
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -26,7 +26,10 @@ filenames = ['1202/output_ping_new_overnight.pcapng',
              '1205/overnight_whole_2alter_prefix.pcapng',
              '1206/output_whole_postfix_overnight.pcapng',
              '1207/output_whole_nonpause_postfix.pcapng',
-             '1207night/output_whole_silence_gap_overnight.pcapng']
+             '1207night/output_whole_silence_gap_overnight.pcapng',
+             '1208music/output_whole_background_music.pcapng',
+             '1208conversation/output_whole_background_conversation.pcapng',
+             '1208keeptalking/output_whole_keep_talking.pcapng']
 filenames = [base_dir + '/' + f for f in filenames]
 filename = filenames[file_test_number]
 # set save directory
@@ -35,7 +38,10 @@ savedirs = ['../../results/1202/',
             '../../results/1205/',
             '../../results/1206/',
             '../../results/1207/',
-            '../../results/1207night/']
+            '../../results/1207night/',
+            '../../results/1208music/',
+            '../../results/1208conversation/'
+            '../../results/1208keeptalking/']
 savedirs = [base_dir + '/' + f for f in savedirs]
 savedir = savedirs[file_test_number]
 
@@ -45,18 +51,24 @@ xlabels = ['',
            'Prefix Length (s)',
            'Postfix Length (s)',
            'Postfix Length (s)',
-           'Time Gap (s)']
+           'Time Gap (s)',
+           '',
+           '',
+           '']
 xlabel = xlabels[file_test_number]
 
 # other test specific params
-init_skip_a = [0, 0, 0, 0, 3, 0]
-num_tests_a = [1, 19, 2, 3, 4, 8]
+init_skip_a = [0, 0, 0, 0, 3, 0, 0, 0, 0]
+num_tests_a = [1, 19, 2, 3, 4, 8, 1, 1, 1]
 prefix_times_a = [[0],
                   [8.5, 8, 7.5, 7, 6.5, 6, 5.5, 5, 4.5, 4, 3.5, 3, 2.5, 2, 1.5, 1, 0.5, 0, 9],
                   [9,0],
                   [0, 0.5, 1],
                   [0,1,2,3],
-                  [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]]
+                  [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8],
+                  [0],
+                  [0],
+                  [0]]
                   
 
 
