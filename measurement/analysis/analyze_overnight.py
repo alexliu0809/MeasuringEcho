@@ -16,7 +16,7 @@ def get_time_secs(packet, start_time):
     return time
 
 # set file number to analyze (see filenames below)
-file_test_number = 6
+file_test_number = 2
 
 # set filename(s) to scan
 script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -229,7 +229,8 @@ for n,p in enumerate(cap):
 
 #%%
 ## PLOT OUTGOING DATA BY FRAME
-for frame in range(len(out_times)):
+# for frame in range(len(out_times)):
+for frame in [1]:
     times_plot = out_times[frame][:]
     sizes_plot = out_sizes[frame][:]
     dsts_plot = out_dsts[frame][:]
@@ -244,6 +245,13 @@ for frame in range(len(out_times)):
     #     del(times_plot[ind-i])
     #     del(sizes_plot[ind-i])
     #     del(dsts_plot[ind-i])
+
+    min_time = np.min(np.min(times_plot))
+    for i in range(len(times_plot)):
+        times_plot[i] = [t-min_time for t in times_plot[i]]
+    for i in range(len(sizes_plot)):
+        sizes_plot[i] = [x/1e3 for x in sizes_plot[i]]
+
 
     # set bin size at 100 ms
     bins = np.arange(np.min(np.min(times_plot)),np.max(np.max(times_plot)), 0.1)
@@ -260,7 +268,7 @@ for frame in range(len(out_times)):
     # create histogram of packet sizes
     plt.subplot2grid((2,3),(1,0), colspan=2)
     plt.hist(times_plot, bins=bins, weights=sizes_plot, stacked=True)
-    plt.ylabel('Amount of Data (bytes)')
+    plt.ylabel('Amount of Data (kB)')
     plt.xlabel('Time (s)')
 
     # create legend of destination addresses off to the side
@@ -269,8 +277,8 @@ for frame in range(len(out_times)):
         plt.plot(0,0)
         plt.xticks([])
         plt.yticks([])
-        plt.box('off')
-    plt.legend(dsts_plot)
+        plt.box(on=False)
+    plt.legend(dsts_plot[:-1])
     plt.tight_layout()
     plt.show()
 
