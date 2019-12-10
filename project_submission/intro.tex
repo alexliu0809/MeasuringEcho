@@ -13,6 +13,6 @@ That being said, we did observe a few outliers that sent significant more data t
 
 \textbf{First, we identified that end-of-command detection was performed by Echo locally, and a 0.7 second pause was needed after the command for Echo to successfully sense the finish of a command.} \todo{How?} 
 
-\textbf{Second, we verified that Echo does not record any audio past the end of a command when such an end is properly detected.} For $I_{11}$ and $I_{12}$ where the pause was clearly long enough for echo to detect the end of the command, we were able to observe similar amount of outgoing traffic as we did for $I_{1}$ and $I_{2}$.
+\textbf{Second, we verified that Echo does not record any audio past the end of a command when such an end is properly detected.} For $I_{11}$ and $I_{12}$ where the pause was clearly long enough for echo to detect the end of the command, we observed similar amount of outgoing traffic as we did for $I_{1}$ and $I_{2}$, implying that Echo did not send anything other the command.
 
-\textbf{Third, if the Echo fails to detect the end of the command, it will continue to record audio.}
+\textbf{Third, if the Echo fails to detect the end of the command, it will continue to record audio.} For $I_{5}$ and $I_{6}$ where the pause was clearly not long enough for echo to detect the end of the command, we observed much large outgoing traffic than we did for $I_{1}$ and $I_{2}$, implying that Echo did send other audio data than just the command.
