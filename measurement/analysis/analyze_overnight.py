@@ -376,9 +376,6 @@ plt.show()
 
 # %%
 ## STATISTICS BY PREFIX LENGTH
-# num_tests = 19
-# prefix_times = 9 - np.linspace(0, 9, num_tests) # 0.5s spacing
-# prefix_times = np.roll(prefix_times, -1)
 
 # calculate mean and std across each prefix length (stride across data)
 means_out = []
@@ -408,9 +405,6 @@ plt.show()
 
 # %%
 ## STATISTICS BY PREFIX LENGTH SEPARATE PLOTS FOR RESPONSE/NO RESP
-# num_tests = 19
-# prefix_times = 9 - np.linspace(0, 9, num_tests) # 0.5s spacing
-# prefix_times = np.roll(prefix_times, -1)
 
 def sep(x, i, retResp):
     if ping3_ip in out_dsts[init_skip+i]:
@@ -481,6 +475,78 @@ plt.legend(['Response', 'No response'])
 plt.xlabel('Time Gap (s)')
 plt.ylabel('Response Breakdown')
 plt.ylim(top=16)
+plt.show()
+
+# %%
+## STATISTICS BY PREFIX LENGTH SEPARATE PLOTS FOR INCOMING RESPONSE SIZE
+
+def sep(x, i, level):
+    bounds = [0, 10000, 20000, 30000]
+    cmp_val = total_size_in_filt[i]
+    if np.isnan(cmp_val):
+        return np.nan
+    elif cmp_val >= bounds[level] and cmp_val < bounds[level+1]:
+        return x
+    else:
+        return np.nan
+
+# split into sizes by response
+split_sizes_out = []
+split_sizes_in = []
+for n in range(3):
+    split_sizes_out.append([sep(x,i,n) for i,x in enumerate(total_size_out_filt)])
+    split_sizes_in.append([sep(x,i,n) for i,x in enumerate(total_size_in_filt)])
+
+
+# calculate mean and std across each prefix length (stride across data)
+split_means_out = []
+split_stds_out = []
+split_means_in = []
+split_stds_in = []
+for j in range(3):
+    split_means_out.append([])
+    split_stds_out.append([])
+    split_means_in.append([])
+    split_stds_in.append([])
+    for i in range(num_tests):
+        split_means_out[j].append(np.nanmean(split_sizes_out[j][i::num_tests]))
+        split_stds_out[j].append(np.nanstd(split_sizes_out[j][i::num_tests]))
+        split_means_in[j].append(np.nanmean(split_sizes_in[j][i::num_tests]))
+        split_stds_in[j].append(np.nanstd(split_sizes_in[j][i::num_tests]))
+
+
+split_counts = []
+for j in range(3):
+    split_counts.append([])
+    for i in range(num_tests):
+        split_counts[j].append(np.sum([1 for x in split_sizes_out[j][i::num_tests] if np.isfinite(x)]))
+    
+
+# plot average size with error bars against prefix length
+plt.figure()
+for i in range(3):
+    plt.errorbar(prefix_times, split_means_out[i], yerr=split_stds_out[i], fmt='*')
+plt.legend(['No reply', 'Error reply', 'Correct reply'])
+plt.xlabel('Time Gap (s)')
+plt.ylabel('Average Outgoing Data Size (bytes)')
+plt.show()
+
+plt.figure()
+for i in range(3):
+    plt.errorbar(prefix_times, split_means_in[i], yerr=split_stds_in[i], fmt='*')
+plt.legend(['No reply', 'Error reply', 'Correct reply'])
+plt.xlabel('Time Gap (s)')
+plt.ylabel('Average Incoming Data Size (bytes)')
+plt.show()
+
+plt.figure()
+plt.bar(prefix_times, split_counts[0], width = 0.08)
+plt.bar(prefix_times, split_counts[1], width = 0.08, bottom=split_counts[0])
+plt.bar(prefix_times, split_counts[2], width = 0.08, bottom=[sum(x) for x in zip(split_counts[0], split_counts[1])])
+plt.legend(['No reply', 'Error reply', 'Correct reply'], ncol=3)
+plt.xlabel('Time Gap (s)')
+plt.ylabel('Reply Type Breakdown')
+plt.ylim(top=15)
 plt.show()
 
 
