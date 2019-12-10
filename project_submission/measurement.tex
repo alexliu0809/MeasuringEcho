@@ -24,4 +24,48 @@ To confirm our results, we extract the response package that Amazon server sent 
 	\vspace{-3mm}
 	\end{figure}
 
+This measures the traffic streamed to server.
+
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{1204/outgoing_data_size_vs_prefix_time.png}
+    \caption{Plot of the total outgoing data size against the length of non-command speech played immediately before a command. The error bars extend to one standard deviation in either direction. Total outgoing data size is calculated as the sum of the TLS packet payload lengths going to the destination IP address with the greatest such sum.}
+    \label{fig:prefix_many}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{1205/outgoing_data_size_vs_prefix_time.png}
+    \caption{\todo{Should probbaly be a bar graph, if present at all. Alternately, side-by-side histograms may be effective}. Plot of the total outgoing data size against the length of non-command speech played immediately before a command. The error bars extend to one standard deviation in either direction. Total outgoing data size is calculated as the sum of the TLS packet payload lengths going to the destination IP address with the greatest such sum.}
+    \label{fig:prefix_two}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{1206/extra_filtered_outgoing_data_size_vs_prefix_time.png}
+    \caption{\todo{Should probbaly be a bar graph, or maybe histograms, but I think three histograms is too many}. Plot of the total outgoing data size against the length of non-command speech played 0.5 s after a command. The error bars extend to one standard deviation in either direction. Total outgoing data size is calculated as the sum of the TLS packet payload lengths going to the destination IP address with the greatest such sum.}
+    \label{fig:postfix_gap}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{1207/extra_filtered_outgoing_data_size_vs_prefix_time.png}
+    \caption{Plot of the total outgoing data size against the length of non-command speech played immediately after a command. The error bars extend to one standard deviation in either direction. Total outgoing data size is calculated as the sum of the TLS packet payload lengths going to the destination IP address with the greatest such sum.}
+    \label{fig:postfix_nogap}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{1207night/extra_filtered_outgoing_data_size_vs_prefix_time.png}
+    \caption{Plot of the total outgoing data size against the length of the gap before non-command speech is played a command. The error bars extend to one standard deviation in either direction. Total outgoing data size is calculated as the sum of the TLS packet payload lengths going to the destination IP address with the greatest such sum.}
+    \label{fig:postfix_variablegap_sizes}
+\end{figure}
+
+\begin{figure}[]
+    \centering
+    \includegraphics[width=\linewidth]{1207night/response_breakdown.png}
+    \caption{\todo{Fix legend and maybe filter differently to show clearer trend.} Bar plot showing how often Alexa replied correctly to a command for different gap lengths between the command and non-command speech.}
+    \label{fig:postfix_variablegap_breakdown}
+\end{figure}
 

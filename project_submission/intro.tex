@@ -7,7 +7,13 @@ To answer all these questions, we opted for a passive mearsurement approach --- 
 
 \textbf{Our first contribution: we confirmed that most of the times Echo only started to record after hearing the wake word.} To test whether Echo would record the conversation before the wake word or not, we crafted two input audio segments for Echo. The first audio segment (denoted as $I_1$) was about 2.5 seconds long, and contained only the Echo command "Alexa, where is New York City?". The other audio segment (denoted as $I_2$) was about 11.5 seconds long, with a 9 seconds irrelevant conversation attached before the Echo command. We played both $I_1$ and $I_2$ alternatively overnight in a setting with noise level X\todo{do we need noise?}. For each segment, we played it for over 100 times, giving as over 100 sample timeframes, within each one could easily compute the total size of packets transmitted. We manually inspected all the timeframes, removing obvious outliers. We then performed \todo{I did t-test} on these datasets, getting a p-value of \todo{X}. Given that our null hypothesis is they are not the same, we come to the conclusion that Echo only started to record after hearing the wake word.
 
-\textbf{Our Second contribution: we confirmed that xxx.} \todo{Other experiments we did.}
+\textbf{Our second contribution: we confirmed that the Echo does not record any audio past the end of a command when such an end is properly detected. However if the Echo fails to detect the end of the command, it will continue to record audio.}
+
+\textbf{Our third contribution: we identify the necessary pause detection of the end of a command, and determine that such detection is done locally on the Echo and not on the Amazon servers.}
+
+
+
+\todo{Other experiments we did.}
 
 %\section{Goals}
 

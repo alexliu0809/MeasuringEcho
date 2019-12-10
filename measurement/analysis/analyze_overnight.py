@@ -29,6 +29,15 @@ filenames = ['1202/output_ping_new_overnight.pcapng',
              '1207night/output_whole_silence_gap_overnight.pcapng']
 filenames = [base_dir + '/' + f for f in filenames]
 filename = filenames[file_test_number]
+# set save directory
+savedirs = ['../../results/1202/',
+            '../../results/1204/',
+            '../../results/1205/',
+            '../../results/1206/',
+            '../../results/1207/',
+            '../../results/1207night/']
+savedirs = [base_dir + '/' + f for f in savedirs]
+savedir = savedirs[file_test_number]
 
 # other test specific params
 init_skip_a = [0, 0, 0, 0, 3, 0]
@@ -167,6 +176,32 @@ for n,p in enumerate(cap):
             # add packet to list
             in_times[frame][i].append(get_time_secs(p, start_time))
             in_sizes[frame][i].append(int(p.ssl.record_length))
+
+    # record ping2 spot
+    if in_frame and p.ip.dst == ping2_ip and p.ip.src == pi_ip:
+        # get dst index if dst exists on list, otherwise add dst to list
+        try:
+            i = out_dsts[frame].index(p.ip.dst)
+        except:
+            out_dsts[frame].append(p.ip.dst)
+            out_times[frame].append([])
+            out_sizes[frame].append([])
+            i = len(out_dsts[frame]) - 1
+        # add packet to list
+        out_times[frame][i].append(get_time_secs(p, start_time))
+        out_sizes[frame][i].append(1000)
+
+        # get src index if src exists on list, otherwise add src to list
+        try:
+            i = in_srcs[frame].index(p.ip.dst)
+        except:
+            in_srcs[frame].append(p.ip.dst)
+            in_times[frame].append([])
+            in_sizes[frame].append([])
+            i = len(in_srcs[frame]) - 1
+        # add packet to list
+        in_times[frame][i].append(get_time_secs(p, start_time))
+        in_sizes[frame][i].append(1000)
     # this is here to allow smaller chunk analysis for debugging
     # if n > 10000:
     #     break
@@ -447,6 +482,21 @@ plt.xlabel('Time Gap (s)')
 plt.ylabel('Response Breakdown')
 plt.ylim(top=16)
 plt.show()
+
+
+# %%
+## SAVE DATA TO FILE TO AVOID NEED FOR RE-ANALYZING
+savefile = savedir + 'framedata.npy'
+np.save(savefile, [out_dsts, out_times, out_sizes, in_srcs, in_times, in_sizes], allow_pickle=True)
+
+# %%
+## RESTORE DATA FROM FILE IF IT EXISTS
+savefile = savedir + 'framedata.npy'
+if (os.path.isfile(savefile)):
+    tmp = np.load(savefile, allow_pickle=True)
+    [out_dsts, out_times, out_sizes, in_srcs, in_times, in_sizes] = tmp.tolist()
+else:
+    print("File doesn't exist")
 
 
 # %%
