@@ -71,7 +71,7 @@ The previous two experiments raise the question of how long, exactly, does Alexa
 
 We attempt to determine this by playing the command with different silence gap before playing the whole postfix sentence, to figure out when Alexa would reply a right answer to our command. We tried adding a silence gap between command and postfix sentence that ranged from 0.1 to 0.8~s with a 0.1~s step.
 
-Fig.~\ref{fig:gap} shows the results from this experiment. The orange chunk means Alexa does not respond to the sentence at all. The blue chunk means Alexa responds, but only after the entire postfix plays, and does not know what the command was supposed to be. The green chunk means Alexa noticed the end of the command correctly and immediately replied to that part instead of to the entire sentence. We can see that Alexa does not start correctly detecting the end of the command until at lease a 0.5~s gap occurs, and the gap needs to be at least 0.7~s to ensure that Alexa will correctly detect the end, and not transmit any potentially private conversation.
+Fig.~\ref{fig:gap} shows the results from this experiment. The blue chunk means Alexa does not respond to the sentence at all. The orange chunk means Alexa responds, but only after the entire postfix plays, and does not know what the command was supposed to be. The green chunk means Alexa noticed the end of the command correctly and immediately replied to that part instead of to the entire sentence. We can see that Alexa does not start correctly detecting the end of the command until at lease a 0.5~s gap occurs, and the gap needs to be at least 0.7~s to ensure that Alexa will correctly detect the end, and not transmit any potentially private conversation.
 
 \begin{figure}[!t]
 	\centering
