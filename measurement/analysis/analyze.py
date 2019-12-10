@@ -27,7 +27,7 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 base_dir = os.path.abspath(script_dir + '/../data')
 # filenames = ['sample_1.pcapng', 'sample_2.pcapng', 'sample_1_1.pcapng', \
 #              'sample_1_2.pcapng', 'sample_1_3.pcapng'] 
-filenames = ['record_clear_overnight/sample_record_clear_overnight.pcapng']
+filenames = ['record_clear_overnight/sample_music_overnight.pcapng']
 filenames = [base_dir + '/' + f for f in filenames]
 disp_filter = 'ip'
 echo_ip = '10.42.0.159'

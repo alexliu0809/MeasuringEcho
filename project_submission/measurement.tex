@@ -1,2 +1,27 @@
 \section{Measuring traffic streamed to server}
-This measures the traffic streamed to server.
+
+\subsection{Necessary Silent Gap}
+
+As from the former result, we could see that Alexa would not be able to detect when the command ends and where to cut off once we started talking too quickly right after the command. Therefore, here raises another question is about how long should we pause before we start our conversation to let Alexa aware that the command is over and avoid Alexa transmitting our private conversation onto the Amazon server.
+
+Here in the Fig. \ref{fig:gap}. The orange chunk means Alexa does not response anything to the sentence. The blue chunk means Alexa response to the whole sentence that made by us but did not know what does it mean. And the red chunk means Alexa had noticed the command and only replied to that part instead of the whole sentence. From Fig. \ref{fig:gap} we can draw out our main result is that we have to stop at least 0.7 seconds or more after the command ends to let the Alexa to figure out the command is over and not transmit any other voice data to the server.
+
+\begin{figure}[ht]
+	\centering
+	\includegraphics[scale=0.4]{response_breakdown}
+	\caption{Response results correspond to silence gap}
+	\label{fig:gap}
+	\vspace{-3mm}
+	\end{figure}
+
+To confirm our results, we extract the response package that Amazon server sent to Alexa and we could see a significant difference among "non-response" package, "error response" package and "correct response" package in Fig \ref{fig:response_package}. The size of package ranged around a mean number for each specific response. The line means the size that the package ranges and the star in the middle of the line is the mean size of each type of packages. The red one stands for "non-response" package, and the blue one stands for "error response" while the orange one stands for "correct response" 
+
+\begin{figure}[ht]
+	\centering
+\includegraphics[scale=0.4]{extra_filtered_incoming_data_size}
+	\caption{Response package from Amazon server}
+	\label{fig:response_package}
+	\vspace{-3mm}
+	\end{figure}
+
+
