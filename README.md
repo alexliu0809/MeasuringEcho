@@ -11,5 +11,8 @@ University of California, San Diego
 
 {e7liu,tjs003,zez003}@eng.ucsd.edu
 
+## Report
+[Report](Liu_Smith_Zhang_Final_227.pdf)
+
 ## Misc
 [Latex Template](https://github.com/acmccs/format)
